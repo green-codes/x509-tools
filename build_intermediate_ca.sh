@@ -42,7 +42,7 @@ openssl ca -config $DIR_ROOT/openssl.cnf \
     -out $DIR/certs/ca.cert.pem
 chmod 444 $DIR/certs/ca.cert.pem
 # create certificate chain with root
-cat $DIR/certs/ca.cert.pem $DIR_ROOT/certs/ca.cert.pem \
+cat $DIR/certs/ca.cert.pem $DIR_ROOT/certs/ca-chain.cert.pem \
     > $DIR/certs/ca-chain.cert.pem
 chmod 444 $DIR/certs/ca-chain.cert.pem
 

@@ -33,6 +33,7 @@ openssl req -config $DIR/openssl.cnf \
     -key $DIR/private/ca.key.pem \
     -new -x509 -days $DAYS -sha256 -extensions v3_ca \
     -out $DIR/certs/ca.cert.pem
+cp $DIR/certs/ca.cert.pem $DIR/certs/ca-chain.cert.pem  # for daisy-chaining
 
 echo -e "\n===== Creating CA CRL ====="
 openssl ca -config $DIR/openssl.cnf \
