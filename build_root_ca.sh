@@ -12,7 +12,7 @@ echo -e 1000 > serial
 echo -e 1000 > crlnumber
 cd ..
 # copy openssl config
-cp openssl_root.cnf $DIR/openssl.cnf
+cp openssl.cnf san_ext.cnf san_template.cnf $DIR/
 if [[ `uname` == "Darwin" ]]; then
     sed -i '' "s/\[CA_DIR\]/$DIR/g" $DIR/openssl.cnf;
 else

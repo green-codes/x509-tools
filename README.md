@@ -5,4 +5,4 @@ Scripts for establishing a local self-signed certificate authority.
 CA Databases are organized into individual folders. Scripts should be executed in the repo root. 
 
 ## Credits
-Inspired by: https://jamielinux.com/docs/openssl-certificate-authority/index.html 
+Inspired by: https://jamielinux.com/docs/openssl-certificate-authority/index.html, https://blog.hqcodeshop.fi/archives/145-Certificate-Authority-setup-Doing-it-right-with-OpenSSL.html 

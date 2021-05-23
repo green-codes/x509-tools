@@ -1,8 +1,9 @@
-# OpenSSL root CA configuration file.
+# OpenSSL CA configuration file.
 # Source: https://jamielinux.com/docs/openssl-certificate-authority/_downloads/root-config.txt
 # Modified for my own use
 
-# != REMEMBER TO CHANGE THE CRL URL! =!
+ca_name = [CA_DIR]
+ca_host = ftp://ministry-mas.com
 
 [ ca ]
 # `man ca`
@@ -10,7 +11,7 @@ default_ca = CA_default
 
 [ CA_default ]
 # Directory and file locations.
-dir               = ./[CA_DIR]
+dir               = ./$ca_name
 certs             = $dir/certs
 crl_dir           = $dir/crl
 new_certs_dir     = $dir/newcerts
@@ -21,12 +22,14 @@ RANDFILE          = $dir/private/.rand
 # The root key and root certificate.
 private_key       = $dir/private/ca.key.pem
 certificate       = $dir/certs/ca.cert.pem
+cert_url          = $ca_host/$ca_name.cert.pem
 
 # For certificate revocation lists.
 crlnumber         = $dir/crlnumber
 crl               = $dir/crl/ca.crl.pem
 crl_extensions    = crl_ext
 default_crl_days  = 3650
+crl_url           = $ca_host/$ca_name.crl.pem
 
 # SHA-1 is deprecated, so use SHA-2 instead.
 default_md        = sha256
@@ -34,7 +37,7 @@ name_opt          = ca_default
 cert_opt          = ca_default
 default_days      = 375
 preserve          = no
-policy            = policy_strict
+policy            = policy_loose
 
 [ policy_strict ]
 # See the POLICY FORMAT section of `man ca`.
@@ -91,6 +94,7 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints = critical, CA:true
 keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+crlDistributionPoints = URI:$CA_default::crl_url
 
 [ v3_intermediate_ca ]
 # Extensions for a typical intermediate CA (`man x509v3_config`).
@@ -98,6 +102,8 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints = critical, CA:true, pathlen:0  # disallow downstream CA
 keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
 
 [ usr_cert ]
 # Extensions for client certificates (`man x509v3_config`).
@@ -108,7 +114,8 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage = clientAuth, emailProtection
-crlDistributionPoints = URI:ftp://ministry-mas.com/[CA_DIR].crl.pem
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
 
 [ server_cert ]
 # Extensions for server certificates (`man x509v3_config`).
@@ -119,7 +126,8 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer:always
 keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth
-crlDistributionPoints = URI:ftp://ministry-mas.com/[CA_DIR].crl.pem
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
 
 [ crl_ext ]
 # Extension for CRLs (`man x509v3_config`).
