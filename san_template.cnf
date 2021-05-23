@@ -1,5 +1,5 @@
 # Put your Subject Alternative Name information here
-.include = san_ext.cnf
+.include = ./[CA_DIR]/san_ext.cnf
 
 [ subject_alt_names ]
 # DNS.1 = 

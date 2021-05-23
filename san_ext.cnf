@@ -1,5 +1,5 @@
 # override default cert configs to include SAN information
-.include = openssl.cnf
+.include = ./[CA_DIR]/openssl.cnf
 
 [ usr_cert ]
 # Extensions for client certificates (`man x509v3_config`).

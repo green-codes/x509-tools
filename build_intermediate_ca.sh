@@ -14,11 +14,10 @@ echo -e 1000 > crlnumber
 cd ..
 # copy openssl config
 cp openssl.cnf san_ext.cnf san_template.cnf $DIR/
-if [[ `uname` == "Darwin" ]]; then
-    sed -i '' "s/\[CA_DIR\]/$DIR/g" $DIR/openssl.cnf;
-else
-    sed -i "s/\[CA_DIR\]/$DIR/g" $DIR/openssl.cnf;
-fi
+if [[ `uname` == "Darwin" ]]; then SED="sed -i ''"; else SED="sed -i"; fi
+$SED "s/\[CA_DIR\]/$DIR/g" $DIR/openssl.cnf;
+$SED "s/\[CA_DIR\]/$DIR/g" $DIR/san_ext.cnf;
+$SED "s/\[CA_DIR\]/$DIR/g" $DIR/san_template.cnf;
 read -p "Edit OpenSSL config? y/[N]: " VAR
 if [[ $VAR =~ ^[Yy]$ ]]; then $EDITOR $DIR/openssl.cnf; fi
 
