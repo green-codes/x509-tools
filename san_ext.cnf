@@ -22,3 +22,14 @@ extendedKeyUsage = serverAuth
 authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
 crlDistributionPoints = URI:$CA_default::crl_url
 subjectAltName = @subject_alt_names
+
+[ site_cert ]
+# Extensions for site certificates (server + client)
+keyUsage = critical, digitalSignature, keyEncipherment
+basicConstraints = critical, CA:FALSE
+extendedKeyUsage = serverAuth,clientAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+crlDistributionPoints = URI:$CA_default::crl_url
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+subjectAltName = @subject_alt_names

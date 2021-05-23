@@ -20,16 +20,16 @@ serial            = $dir/serial
 RANDFILE          = $dir/private/.rand
 
 # The root key and root certificate.
-private_key       = $dir/private/ca.key.pem
-certificate       = $dir/certs/ca.cert.pem
-cert_url          = $ca_host/$ca_name.cert.pem
+private_key       = $dir/private/ca.key
+certificate       = $dir/certs/ca.crt
+cert_url          = $ca_host/$ca_name.crt
 
 # For certificate revocation lists.
 crlnumber         = $dir/crlnumber
-crl               = $dir/crl/ca.crl.pem
+crl               = $dir/crl/ca.crl
 crl_extensions    = crl_ext
 default_crl_days  = 3650
-crl_url           = $ca_host/$ca_name.crl.pem
+crl_url           = $ca_host/$ca_name.crl
 
 # SHA-1 is deprecated, so use SHA-2 instead.
 default_md        = sha256
@@ -122,6 +122,16 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer:always
 keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ site_cert ]
+# Extensions for site certificates (server + client)
+keyUsage = critical, digitalSignature, keyEncipherment
+basicConstraints = critical, CA:FALSE
+extendedKeyUsage = serverAuth,clientAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
 authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
 crlDistributionPoints = URI:$CA_default::crl_url
 
