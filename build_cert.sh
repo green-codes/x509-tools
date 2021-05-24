@@ -38,4 +38,6 @@ else  # use vanilla configs
         -in $DIR/csr/$CN.csr \
         -out $DIR/certs/$CN.crt
 fi
-chmod 444 $DIR/certs/$CN.crt
+# make certificate chain by default
+cat $DIR/certs/$CN.crt $DIR/certs/ca-chain.crt > $DIR/certs/$CN-chain.crt
+chmod 444 $DIR/certs/$CN.crt $DIR/certs/$CN-chain.crt
