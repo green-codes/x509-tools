@@ -22,7 +22,7 @@ RANDFILE          = $dir/private/.rand
 # The root key and root certificate.
 private_key       = $dir/private/ca.key
 certificate       = $dir/certs/ca.crt
-cert_url          = $ca_host/$ca_name.crt
+cert_url          = $ca_host/$ca_name-chain.crt
 
 # For certificate revocation lists.
 crlnumber         = $dir/crlnumber

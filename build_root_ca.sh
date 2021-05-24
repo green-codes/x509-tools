@@ -41,5 +41,6 @@ echo -e "\n===== Synchronize Data to Server ====="
 read -p "Sync to $SERVER_HOST? Y/[N]: " VAR
 if [[ $VAR =~ ^[Yy]$ ]]; then
     scp $DIR/certs/ca.crt $SERVER_USER@$SERVER_HOST:/srv/ftp/$DIR.crt
+    scp $DIR/certs/ca-chain.crt $SERVER_USER@$SERVER_HOST:/srv/ftp/$DIR-chain.crt
     scp $DIR/crl/ca.crl $SERVER_USER@$SERVER_HOST:/srv/ftp/$DIR.crl
 fi
