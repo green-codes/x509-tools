@@ -5,6 +5,7 @@ read -p "Use certificate extension: " EXT
 if [[ -e $DIR/private/$CN.key ]]; then rm -f $DIR/private/$CN.key; fi
 if [[ -e $DIR/csr/$CN.csr ]]; then rm -f $DIR/csr/$CN.csr; fi
 if [[ -e $DIR/certs/$CN.crt ]]; then rm -f $DIR/certs/$CN.crt; fi
+if [[ -e $DIR/certs/$CN-chain.crt ]]; then rm -f $DIR/certs/$CN-chain.crt; fi
 
 echo -e "\n===== Creating Certificate Key ====="
 openssl genrsa \
