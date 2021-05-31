@@ -1,6 +1,5 @@
 read -p "Using CA (dir): " DIR
 read -p "New file prefix: " CN
-read -p "Use certificate extension: " EXT
 
 if [[ -e $DIR/private/$CN.key ]]; then rm -f $DIR/private/$CN.key; fi
 if [[ -e $DIR/csr/$CN.csr ]]; then rm -f $DIR/csr/$CN.csr; fi
@@ -20,6 +19,8 @@ openssl req -config $DIR/openssl.cnf \
 echo -e "\n===== Signing Certificate ====="
 read -p "Days valid [375]: " VAR
 if [[ -z $VAR ]]; then DAYS=375; else DAYS=$VAR; fi
+read -p "Use certificate extension [site_cert]: " VAR
+if [[ -z $VAR ]]; then EXT="site_cert"; else EXT=$VAR; fi
 read -p "Use Subject Alternative Name (SAN)? y/[N]: " VAR
 if [[ $VAR =~ ^[Yy]$ ]]; 
 then  # use the SAN extension
