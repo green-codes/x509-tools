@@ -28,7 +28,7 @@ chmod 400 $DIR/private/ca.key
 echo -e "\n===== Creating CA Certificate ====="
 read -p "Days valid [7300]: " VAR
 if [[ -z $VAR ]]; then DAYS=7300; else DAYS=$VAR; fi
-openssl req -config $DIR/openssl.cnf \
+openssl req -utf8 -config $DIR/openssl.cnf \
     -key $DIR/private/ca.key \
     -new -x509 -days $DAYS -sha256 -extensions v3_ca \
     -out $DIR/certs/ca.crt

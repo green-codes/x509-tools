@@ -27,7 +27,7 @@ openssl genrsa -aes256 \
 chmod 400 $DIR/private/ca.key
 
 echo -e "\n===== Creating CA CSR ====="
-openssl req -config $DIR/openssl.cnf -new -sha256 \
+openssl req -utf8 -config $DIR/openssl.cnf -new -sha256 \
     -key $DIR/private/ca.key \
     -out $DIR/csr/ca.csr
 

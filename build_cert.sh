@@ -14,7 +14,7 @@ chmod 400 $DIR/private/$NAME.key
 cp $DIR/private/$NAME.key $DIR/private/newkeys/$(cat $DIR/serial).key
 
 echo -e "\n===== Creating Certificate CSR ====="
-openssl req -config $DIR/openssl.cnf \
+openssl req -utf8 -config $DIR/openssl.cnf \
     -key $DIR/private/$NAME.key \
     -new -sha256 -out $DIR/csr/$NAME.csr
 
