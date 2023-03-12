@@ -1,0 +1,7 @@
+# Put your Subject Alternative Name information here
+.include = ./ca/[CA_NAME]/san_ext.cnf
+
+[ subject_alt_names ]
+# DNS.1 = 
+# DNS.2 = 
+# IP = 
