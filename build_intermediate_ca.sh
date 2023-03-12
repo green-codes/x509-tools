@@ -40,6 +40,7 @@ openssl ca -config $DIR_ROOT/openssl.cnf \
     -in $DIR/csr/ca.csr \
     -out $DIR/certs/ca.crt
 chmod 444 $DIR/certs/ca.crt
+cp $DIR/certs/ca.crt $DIR_ROOT/certs/$NAME.crt
 # create certificate chain with root
 cat $DIR/certs/ca.crt $DIR_ROOT/certs/ca-chain.crt \
     > $DIR/certs/ca-chain.crt
