@@ -81,12 +81,12 @@ commonName                      = Common Name
 emailAddress                    = Email Address
 
 # Optionally, specify some defaults.
-countryName_default             = SC
-stateOrProvinceName_default     = Independent State of Starlight City
-localityName_default            = Starlight City
-0.organizationName_default      = Daybreak Institute of Science and Magic
-organizationalUnitName_default  = DISM Certification Authority
-emailAddress_default            =
+#countryName_default             = SC
+#stateOrProvinceName_default     = Independent State of Starlight City
+#localityName_default            = Starlight City
+#0.organizationName_default      = Daybreak Institute of Science and Magic
+#organizationalUnitName_default  = DISM Certification Authority
+#emailAddress_default            =
 
 [ v3_ca ]
 # Extensions for a typical CA (`man x509v3_config`).
