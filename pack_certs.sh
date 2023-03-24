@@ -1,6 +1,6 @@
 # request letsencrypt certificates
 SIGNER=1F517725
-RECIPIENT=1F517725  #171DCA62
+RECIPIENT=171DCA62
 OUT_DIR="../vault/ca"
 
 if ! [[ $# == 1 ]]; then echo "Usage: $0 path/to/cert/dir"; exit; fi
