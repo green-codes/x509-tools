@@ -4,7 +4,7 @@ DIR="ca/$NAME"
 
 echo -e "\n===== Creating CA Database ====="
 mkdir $DIR && cd $DIR
-mkdir certs crl newcerts private
+mkdir certs crl csr newcerts private
 chmod 700 private
 mkdir private/newkeys
 chmod 700 private/newkeys
