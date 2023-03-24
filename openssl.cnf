@@ -173,6 +173,9 @@ signer_cert	= $dir/certs/tsa.crt	# The TSA signing certificate
 certs		= $dir/certs/ca-chain.crt	# Certificate chain to include in reply
 					# (optional)
 signer_key	= $dir/private/tsa.key	# The TSA private key (optional)
+default_policy	= 1.2.3.4.1		# Policy if request did not specify it
+					# (optional)
+other_policies	= 1.2.3.4.5.6, 1.2.3.4.5.7	# acceptable policies (optional)
 signer_digest  = sha256			# Signing digest to use. (Optional)
 digests     = sha1, sha256, sha384, sha512  # Acceptable message digests (mandatory)
 accuracy	= secs:1, millisecs:500, microsecs:100	# (optional)
