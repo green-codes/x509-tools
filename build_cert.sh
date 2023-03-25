@@ -11,7 +11,7 @@ echo -e "\n===== Creating Certificate Key ====="
 read -p "Password-protect private key? y/[N]: " VAR
 if [[ $VAR =~ ^[Yy]$ ]]; then ENC="-aes256"; else ENC=""; fi
 openssl genpkey $ENC \
-    -algorithm ed25519 \
+    -algorithm RSA -pkeyopt rsa_keygen_bits:2048 \
     -out $DIR/private/$NAME.key
 chmod 400 $DIR/private/$NAME.key
 cp $DIR/private/$NAME.key $DIR/private/newkeys/$(cat $DIR/serial).key

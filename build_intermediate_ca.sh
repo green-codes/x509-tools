@@ -25,7 +25,7 @@ echo -e "\n===== Creating CA Key ====="
 read -p "Password-protect private key? y/[N]: " VAR
 if [[ $VAR =~ ^[Yy]$ ]]; then ENC="-aes256"; else ENC=""; fi
 openssl genpkey $ENC \
-    -algorithm ed25519 \
+    -algorithm RSA -pkeyopt rsa_keygen_bits:4096 \
     -out $DIR/private/ca.key
 chmod 400 $DIR/private/ca.key
 
