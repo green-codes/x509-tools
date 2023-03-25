@@ -47,10 +47,11 @@ cp $DIR/certs/ca.crt $DIR_ROOT/certs/$NAME.crt
 # create certificate chain with root
 cat $DIR/certs/ca.crt $DIR_ROOT/certs/ca-chain.crt \
     > $DIR/certs/ca-chain.crt
-chmod 444 $DIR/certs/ca-chain.crt
+cp $DIR/certs/ca-chain.crt $DIR_ROOT/certs/$NAME-chain.crt
+chmod 444 $DIR/certs/ca-chain.crt $DIR_ROOT/certs/$NAME-chain.crt
 
 echo -e "\n===== Verifying certificate against root CA ====="
-openssl verify -CAfile $DIR_ROOT/certs/ca.crt \
+openssl verify -CAfile $DIR_ROOT/certs/ca-chain.crt \
     $DIR/certs/ca.crt
 
 echo -e "\n===== Creating CA CRL ====="

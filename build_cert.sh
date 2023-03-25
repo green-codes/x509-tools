@@ -48,3 +48,7 @@ fi
 # make certificate chain by default
 cat $DIR/certs/$NAME.crt $DIR/certs/ca-chain.crt > $DIR/certs/$NAME-chain.crt
 chmod 444 $DIR/certs/$NAME.crt $DIR/certs/$NAME-chain.crt
+
+echo -e "\n===== Verifying certificate against root CA ====="
+openssl verify -CAfile $DIR/certs/ca-chain.crt \
+    $DIR/certs/$NAME.crt
