@@ -22,8 +22,11 @@ read -p "Edit OpenSSL config? y/[N]: " VAR
 if [[ $VAR =~ ^[Yy]$ ]]; then $EDITOR $DIR/openssl.cnf; fi
 
 echo -e "\n===== Creating CA Key ====="
-openssl genrsa -aes256 \
-    -out $DIR/private/ca.key 4096
+read -p "Password-protect private key? y/[N]: " VAR
+if [[ $VAR =~ ^[Yy]$ ]]; then ENC="-aes256"; else ENC=""; fi
+openssl genpkey $ENC \
+    -algorithm ed25519 \
+    -out $DIR/private/ca.key
 chmod 400 $DIR/private/ca.key
 
 echo -e "\n===== Creating CA CSR ====="

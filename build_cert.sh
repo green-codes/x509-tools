@@ -8,8 +8,11 @@ if [[ -e $DIR/certs/$NAME.crt ]]; then rm -f $DIR/certs/$NAME.crt; fi
 if [[ -e $DIR/certs/$NAME-chain.crt ]]; then rm -f $DIR/certs/$NAME-chain.crt; fi
 
 echo -e "\n===== Creating Certificate Key ====="
-openssl genrsa \
-    -out $DIR/private/$NAME.key 2048
+read -p "Password-protect private key? y/[N]: " VAR
+if [[ $VAR =~ ^[Yy]$ ]]; then ENC="-aes256"; else ENC=""; fi
+openssl genpkey $ENC \
+    -algorithm ed25519 \
+    -out $DIR/private/$NAME.key
 chmod 400 $DIR/private/$NAME.key
 cp $DIR/private/$NAME.key $DIR/private/newkeys/$(cat $DIR/serial).key
 
