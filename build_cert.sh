@@ -35,6 +35,7 @@ then  # use the SAN extension
         -extensions $EXT \
         -extfile $DIR/san.temp.cnf \
         -days $DAYS -notext -md sha256 \
+        -rand_serial \
         -in $DIR/csr/$NAME.csr \
         -out $DIR/certs/$NAME.crt
     rm $DIR/san.temp.cnf
@@ -42,6 +43,7 @@ else  # use vanilla configs
     openssl ca -config $DIR/openssl.cnf \
         -extensions $EXT \
         -days $DAYS -notext -md sha256 \
+        -rand_serial \
         -in $DIR/csr/$NAME.csr \
         -out $DIR/certs/$NAME.crt
 fi
