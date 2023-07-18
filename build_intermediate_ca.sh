@@ -10,8 +10,8 @@ chmod 700 private
 mkdir private/newkeys
 chmod 700 private/newkeys
 touch index.txt
-echo 1000 > serial
-echo 1000 > crlnumber
+# echo 1000 > serial
+# echo 1000 > crlnumber
 cd -
 # copy openssl config
 cp openssl.cnf san_ext.cnf san_template.cnf $DIR/
@@ -40,6 +40,7 @@ if [[ -z $VAR ]]; then DAYS=3650; else DAYS=$VAR; fi
 openssl ca -config $DIR_ROOT/openssl.cnf \
     -extensions v3_intermediate_ca \
     -days $DAYS -notext -md sha256 \
+    -rand_serial \
     -in $DIR/csr/ca.csr \
     -out $DIR/certs/ca.crt
 chmod 444 $DIR/certs/ca.crt

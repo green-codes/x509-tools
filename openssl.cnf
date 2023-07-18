@@ -25,7 +25,7 @@ certificate       = $dir/certs/ca.crt
 cert_url          = $ca_host/$ca_name-chain.crt
 
 # For certificate revocation lists.
-crlnumber         = $dir/crlnumber
+# crlnumber         = $dir/crlnumber
 crl               = $dir/crl/ca.crl
 crl_extensions    = crl_ext
 default_crl_days  = 3650

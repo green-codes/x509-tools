@@ -9,8 +9,8 @@ chmod 700 private
 mkdir private/newkeys
 chmod 700 private/newkeys
 touch index.txt
-echo 1000 > serial
-echo 1000 > crlnumber
+# echo 1000 > serial
+# echo 1000 > crlnumber
 cd -
 # copy openssl config
 cp openssl.cnf san_ext.cnf san_template.cnf $DIR/
