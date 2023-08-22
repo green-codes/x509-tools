@@ -54,3 +54,8 @@ chmod 444 $DIR/certs/$NAME.crt $DIR/certs/$NAME-chain.crt
 echo -e "\n===== Verifying certificate against root CA ====="
 openssl verify -CAfile $DIR/certs/ca-chain.crt \
     $DIR/certs/$NAME.crt
+
+echo -e "\n===== Updating CA CRL ====="
+echo $(cat /dev/random | head -c8 | hexdump -vn16 -e'4/4 "%08X" 1 "\n"') > $DIR/crlnumber
+openssl ca -config $DIR/openssl.cnf \
+    -gencrl -out $DIR/crl/ca.crl

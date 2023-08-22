@@ -3,7 +3,7 @@
 # Modified for my own use
 
 ca_name = [CA_NAME]
-ca_host = https://gitee.com/green-codes/public/raw/master
+ca_host = https://asv.ink/ca
 
 [ ca ]
 # `man ca`
@@ -25,7 +25,7 @@ certificate       = $dir/certs/ca.crt
 cert_url          = $ca_host/$ca_name-chain.crt
 
 # For certificate revocation lists.
-# crlnumber         = $dir/crlnumber
+crlnumber         = $dir/crlnumber
 crl               = $dir/crl/ca.crl
 crl_extensions    = crl_ext
 default_crl_days  = 3650

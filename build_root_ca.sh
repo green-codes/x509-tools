@@ -9,8 +9,6 @@ chmod 700 private
 mkdir private/newkeys
 chmod 700 private/newkeys
 touch index.txt
-# echo 1000 > serial
-# echo 1000 > crlnumber
 cd -
 # copy openssl config
 cp openssl.cnf san_ext.cnf san_template.cnf $DIR/
@@ -38,5 +36,6 @@ openssl req -utf8 -config $DIR/openssl.cnf \
 cp $DIR/certs/ca.crt $DIR/certs/ca-chain.crt  # for daisy-chaining
 
 echo -e "\n===== Creating CA CRL ====="
+echo $(cat /dev/random | head -c8 | hexdump -vn16 -e'4/4 "%08X" 1 "\n"') > $DIR/crlnumber
 openssl ca -config $DIR/openssl.cnf \
     -gencrl -out $DIR/crl/ca.crl
