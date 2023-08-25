@@ -22,8 +22,16 @@ openssl req -utf8 -config $DIR/openssl.cnf \
     -new -sha256 -out $DIR/csr/$NAME.csr
 
 echo -e "\n===== Signing Certificate ====="
-read -p "Days valid [375]: " VAR
-if [[ -z $VAR ]]; then DAYS=375; else DAYS=$VAR; fi
+read -p "Start Date (YYYYmmDDHHMMSSZ) [NOW]: " VAR
+if ! [[ -z $VAR ]]; then 
+    START="-startdate $VAR";
+    read -p "End Date (YYYYmmDDHHMMSSZ): " VAR
+    if ! [[ -z $VAR ]]; then END="-enddate $VAR"; fi
+fi
+if [[ -z $END ]]; then
+    read -p "Days valid from now [7300]: " VAR
+    if [[ -z $VAR ]]; then DAYS="-days 7300"; else DAYS="-days $VAR"; fi
+fi
 read -p "Use certificate extension [site_cert]: " VAR
 if [[ -z $VAR ]]; then EXT="site_cert"; else EXT=$VAR; fi
 read -p "Use Subject Alternative Name (SAN)? y/[N]: " VAR
@@ -34,16 +42,18 @@ then  # use the SAN extension
     openssl ca -config $DIR/openssl.cnf \
         -extensions $EXT \
         -extfile $DIR/san.temp.cnf \
-        -days $DAYS -notext -md sha256 \
+        -notext -md sha256 \
         -rand_serial \
+        $START $END $DAYS \
         -in $DIR/csr/$NAME.csr \
         -out $DIR/certs/$NAME.crt
     rm $DIR/san.temp.cnf
 else  # use vanilla configs
     openssl ca -config $DIR/openssl.cnf \
         -extensions $EXT \
-        -days $DAYS -notext -md sha256 \
+        -notext -md sha256 \
         -rand_serial \
+        $START $END $DAYS \
         -in $DIR/csr/$NAME.csr \
         -out $DIR/certs/$NAME.crt
 fi
@@ -54,8 +64,3 @@ chmod 444 $DIR/certs/$NAME.crt $DIR/certs/$NAME-chain.crt
 echo -e "\n===== Verifying certificate against root CA ====="
 openssl verify -CAfile $DIR/certs/ca-chain.crt \
     $DIR/certs/$NAME.crt
-
-echo -e "\n===== Updating CA CRL ====="
-echo $(cat /dev/random | head -c8 | hexdump -vn16 -e'4/4 "%08X" 1 "\n"') > $DIR/crlnumber
-openssl ca -config $DIR/openssl.cnf \
-    -gencrl -out $DIR/crl/ca.crl

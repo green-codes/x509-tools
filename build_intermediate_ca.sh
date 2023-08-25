@@ -33,12 +33,21 @@ openssl req -utf8 -config $DIR/openssl.cnf -new -sha256 \
     -out $DIR/csr/ca.csr
 
 echo -e "\n===== Signing CA Certificate ====="
-read -p "Days valid [3650]: " VAR
-if [[ -z $VAR ]]; then DAYS=3650; else DAYS=$VAR; fi
+read -p "Start Date (YYYYmmDDHHMMSSZ) [NOW]: " VAR
+if ! [[ -z $VAR ]]; then 
+    START="-startdate $VAR";
+    read -p "End Date (YYYYmmDDHHMMSSZ): " VAR
+    if ! [[ -z $VAR ]]; then END="-enddate $VAR"; fi
+fi
+if [[ -z $END ]]; then
+    read -p "Days valid from now [7300]: " VAR
+    if [[ -z $VAR ]]; then DAYS="-days 7300"; else DAYS="-days $VAR"; fi
+fi
 openssl ca -config $DIR_ROOT/openssl.cnf \
     -extensions v3_intermediate_ca \
-    -days $DAYS -notext -md sha256 \
+    -notext -md sha256 \
     -rand_serial \
+    $START $END $DAYS \
     -in $DIR/csr/ca.csr \
     -out $DIR/certs/ca.crt
 chmod 444 $DIR/certs/ca.crt
@@ -54,11 +63,6 @@ openssl verify -CAfile $DIR_ROOT/certs/ca-chain.crt \
     $DIR/certs/ca.crt
 
 echo -e "\n===== Creating CA CRL ====="
-echo $(cat /dev/random | head -c8 | hexdump -vn16 -e'4/4 "%08X" 1 "\n"') > $DIR/crlnumber
+echo $(cat /dev/random | head -c20 | hexdump -vn20 -e'4/4 "%08X" 1 "\n"') > $DIR/crlnumber
 openssl ca -config $DIR/openssl.cnf \
     -gencrl -out $DIR/crl/ca.crl
-
-echo -e "\n===== Updating Root CA CRL ====="
-echo $(cat /dev/random | head -c8 | hexdump -vn16 -e'4/4 "%08X" 1 "\n"') > $DIR_ROOT/crlnumber
-openssl ca -config $DIR_ROOT/openssl.cnf \
-    -gencrl -out $DIR_ROOT/crl/ca.crl
