@@ -105,6 +105,18 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
 crlDistributionPoints = URI:$CA_default::crl_url
 
+[ crl_ext ]
+# Extension for CRLs (`man x509v3_config`).
+authorityKeyIdentifier=keyid:always
+
+[ any_cert ]
+# Extension for all-purpose certificates
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
 [ usr_cert ]
 # Extensions for client certificates (`man x509v3_config`).
 basicConstraints = CA:FALSE
@@ -112,15 +124,6 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage = clientAuth, emailProtection
-authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
-crlDistributionPoints = URI:$CA_default::crl_url
-
-[ tsa_cert ]
-# Extensions for timestamp certificates (`man x509v3_config`).
-basicConstraints = CA:FALSE
-subjectKeyIdentifier = hash
-authorityKeyIdentifier = keyid,issuer
-extendedKeyUsage = critical,timeStamping
 authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
 crlDistributionPoints = URI:$CA_default::crl_url
 
@@ -136,17 +139,13 @@ crlDistributionPoints = URI:$CA_default::crl_url
 
 [ site_cert ]
 # Extensions for site certificates (server + client)
-keyUsage = critical, digitalSignature, keyEncipherment
 basicConstraints = critical, CA:FALSE
-extendedKeyUsage = serverAuth,clientAuth
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth,clientAuth
 authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
 crlDistributionPoints = URI:$CA_default::crl_url
-
-[ crl_ext ]
-# Extension for CRLs (`man x509v3_config`).
-authorityKeyIdentifier=keyid:always
 
 [ ocsp ]
 # Extension for OCSP signing certificates (`man ocsp`).
@@ -155,6 +154,17 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ tsa_cert ]
+# Extensions for timestamp certificates (`man x509v3_config`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+extendedKeyUsage = critical,timeStamping
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
 
 ####################################################################
 

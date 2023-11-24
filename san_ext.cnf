@@ -1,6 +1,15 @@
 # override default cert configs to include SAN information
 .include = ./ca/[CA_NAME]/openssl.cnf
 
+[ any_cert ]
+# Extension for all-purpose certificates
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+subjectAltName = @subject_alt_names
+
 [ usr_cert ]
 # Extensions for client certificates (`man x509v3_config`).
 basicConstraints = CA:FALSE
