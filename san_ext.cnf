@@ -1,0 +1,44 @@
+# override default cert configs to include SAN information
+.include = ./ca/[CA_NAME]/openssl.cnf
+
+[ any_cert ]
+# Extension for all-purpose certificates
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+subjectAltName = @subject_alt_names
+
+[ usr_cert ]
+# Extensions for client certificates (`man x509v3_config`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth, emailProtection
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+subjectAltName = @subject_alt_names
+
+[ server_cert ]
+# Extensions for server certificates (`man x509v3_config`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+subjectAltName = @subject_alt_names
+
+[ site_cert ]
+# Extensions for site certificates (server + client)
+keyUsage = critical, digitalSignature, keyEncipherment
+basicConstraints = critical, CA:FALSE
+extendedKeyUsage = serverAuth,clientAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+crlDistributionPoints = URI:$CA_default::crl_url
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+subjectAltName = @subject_alt_names

@@ -1,0 +1,200 @@
+# OpenSSL CA configuration file.
+# Source: https://jamielinux.com/docs/openssl-certificate-authority/_downloads/root-config.txt
+# Modified for my own use
+
+ca_name = [CA_NAME]
+ca_host = https://asv.ink/ca
+
+[ ca ]
+# `man ca`
+default_ca = CA_default
+
+[ CA_default ]
+# Directory and file locations.
+dir               = ./ca/$ca_name
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database          = $dir/index.txt
+serial            = $dir/serial
+RANDFILE          = $dir/private/.rand
+
+# The root key and root certificate.
+private_key       = $dir/private/ca.key
+certificate       = $dir/certs/ca.crt
+cert_url          = $ca_host/$ca_name-chain.crt
+
+# For certificate revocation lists.
+crlnumber         = $dir/crlnumber
+crl               = $dir/crl/ca.crl
+crl_extensions    = crl_ext
+default_crl_days  = 3650
+crl_url           = $ca_host/$ca_name.crl
+
+# SHA-1 is deprecated, so use SHA-2 instead.
+default_md        = sha256
+name_opt          = ca_default
+cert_opt          = ca_default
+default_days      = 375
+preserve          = no
+policy            = policy_loose
+
+[ policy_strict ]
+# See the POLICY FORMAT section of `man ca`.
+countryName             = match
+stateOrProvinceName     = match
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ policy_loose ]
+# See the POLICY FORMAT section of the `ca` man page.
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ req ]
+# Options for the `req` tool (`man req`).
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+
+# SHA-1 is deprecated, so use SHA-2 instead.
+default_md          = sha256
+
+# Extension to add when the -x509 option is used.
+x509_extensions     = v3_ca
+
+[ req_distinguished_name ]
+# See <https://en.wikipedia.org/wiki/Certificate_signing_request>.
+countryName                     = Country Name (2 letter code)
+stateOrProvinceName             = State or Province Name
+localityName                    = Locality Name
+0.organizationName              = Organization Name
+organizationalUnitName          = Organizational Unit Name
+commonName                      = Common Name
+emailAddress                    = Email Address
+
+# Optionally, specify some defaults.
+#countryName_default             = SC
+#stateOrProvinceName_default     = Independent State of Starlight City
+#localityName_default            = Starlight City
+#0.organizationName_default      = Daybreak Institute of Science and Magic
+#organizationalUnitName_default  = DISM Certification Authority
+#emailAddress_default            =
+
+[ v3_ca ]
+# Extensions for a typical CA (`man x509v3_config`).
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ v3_intermediate_ca ]
+# Extensions for a typical intermediate CA (`man x509v3_config`).
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true, pathlen:0  # disallow downstream CA
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ crl_ext ]
+# Extension for CRLs (`man x509v3_config`).
+authorityKeyIdentifier=keyid:always
+
+[ any_cert ]
+# Extension for all-purpose certificates
+basicConstraints       = CA:FALSE
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ usr_cert ]
+# Extensions for client certificates (`man x509v3_config`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth, emailProtection
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ server_cert ]
+# Extensions for server certificates (`man x509v3_config`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ site_cert ]
+# Extensions for site certificates (server + client)
+basicConstraints = critical, CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth,clientAuth
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ ocsp ]
+# Extension for OCSP signing certificates (`man ocsp`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature
+extendedKeyUsage = critical, OCSPSigning
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+[ tsa_cert ]
+# Extensions for timestamp certificates (`man x509v3_config`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+extendedKeyUsage = critical,timeStamping
+authorityInfoAccess = caIssuers;URI:$CA_default::cert_url
+crlDistributionPoints = URI:$CA_default::crl_url
+
+####################################################################
+
+[ tsa ]
+
+default_tsa = tsa_config1	# the default TSA section
+
+[ tsa_config1 ]
+
+# These are used by the TSA reply generation only.
+dir             = ./ca/$ca_name		# TSA root directory
+serial		= $dir/tsaserial	# The current serial number (mandatory)
+crypto_device	= builtin		# OpenSSL engine to use for signing
+signer_cert	= $dir/certs/tsa.crt	# The TSA signing certificate
+					# (optional)
+certs		= $dir/certs/ca-chain.crt	# Certificate chain to include in reply
+					# (optional)
+signer_key	= $dir/private/tsa.key	# The TSA private key (optional)
+default_policy	= 1.2.3.4.1		# Policy if request did not specify it
+					# (optional)
+other_policies	= 1.2.3.4.5.6, 1.2.3.4.5.7	# acceptable policies (optional)
+signer_digest  = sha256			# Signing digest to use. (Optional)
+digests     = sha1, sha256, sha384, sha512  # Acceptable message digests (mandatory)
+accuracy	= secs:1, millisecs:500, microsecs:100	# (optional)
+clock_precision_digits  = 0	# number of digits after dot. (optional)
+ordering		= yes	# Is ordering defined for timestamps?
+				# (optional, default: no)
+tsa_name		= yes	# Must the TSA name be included in the reply?
+				# (optional, default: no)
+ess_cert_id_chain	= no	# Must the ESS cert id chain be included?
+				# (optional, default: no)
+ess_cert_id_alg		= sha1	# algorithm to compute certificate
+				# identifier (optional, default: sha1)
