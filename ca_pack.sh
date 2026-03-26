@@ -1,6 +1,6 @@
 # packs designated CA dir in working area to repo
 SIGNER=1F517725
-RECIPIENT=171DCA62
+RECIPIENT=FF9D9F16
 OUT_DIR="./repo"
 
 if ! [[ $# == 1 ]]; then echo "Usage: $0 path/to/cert/dir"; exit; fi
@@ -11,7 +11,7 @@ echo "Will package $1 to:\n > $OUT_FILE"
 read -p "Continue? [y/N]: " VAR
 if ! [[ $VAR =~ [Yy] ]]; then exit; fi
 
-if ! [[ -d $OUT_DIR ]]; then mkdir -p OUT_DIR; fi
+if ! [[ -d $OUT_DIR ]]; then mkdir -p $OUT_DIR; fi
 tar -C $(dirname $1) -c $(basename $1) | pbzip2 | gpg -s -u $SIGNER -e -r $RECIPIENT > $OUT_FILE
 
 read -p "Delete original? [y/N]: " VAR

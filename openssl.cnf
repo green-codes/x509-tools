@@ -3,7 +3,7 @@
 # Modified for my own use
 
 ca_name = [CA_NAME]
-ca_host = https://asv.ink/ca
+ca_host = https://k7gcl.xyz/ca
 
 [ ca ]
 # `man ca`
