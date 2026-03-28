@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read -p "Using CA (name): " CA_NAME
 read -p "Certificate name: " CERT_NAME
 CA_DIR="ca/$CA_NAME"

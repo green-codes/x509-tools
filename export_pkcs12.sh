@@ -1,7 +1,9 @@
+#!/bin/bash
+
 read -p "Using CA (name): " CA_NAME
 read -p "Certificate name: " CERT_NAME
 CA_DIR="ca/$CA_NAME"
-OUT_DIR="$HOME/Downloads"
+OUT_DIR="$(readlink -f $(dirname $0))"
 
 if ! [[ -f $CA_DIR/certs/$CERT_NAME.crt ]]; then echo "Certificate does not exist!"; exit -1; fi
 echo "Will output to $OUT_DIR/"

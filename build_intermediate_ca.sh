@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read -p "Name for root CA database: " NAME_ROOT
 read -p "Name for new intermediate CA database: " NAME
 DIR_ROOT="ca/$NAME_ROOT"

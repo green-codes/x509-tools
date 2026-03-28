@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # unpacks designated CA archive to working dir
 OUT_DIR="./ca"
 
@@ -8,4 +10,4 @@ read -p "Continue? [y/N]: " VAR
 if ! [[ $VAR =~ [Yy] ]]; then exit; fi
 
 if ! [[ -e $OUT_DIR ]]; then mkdir -p $OUT_DIR; fi
-cat $1 | gpg -d | pbzip2 -d | tar -C $OUT_DIR -x
+cat $1 | gpg -d | bzip2 -d | tar -C $OUT_DIR -x

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read -p "Using CA (name): " NAME_CA
 read -p "Name for new certificate: " NAME
 DIR="ca/$NAME_CA"

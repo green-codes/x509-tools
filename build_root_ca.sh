@@ -1,3 +1,5 @@
+#!/bin/bash
+
 read -p "Name for new root CA database: " NAME
 if ! [[ -d ca ]]; then mkdir ca; fi
 DIR="ca/$NAME"
